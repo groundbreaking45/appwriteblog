@@ -1,1 +1,7 @@
 @import "tailwindcss";
+
+.tox-edit-area iframe {
+  min-height: 200px !important;
+  touch-action: manipulation;
+  caret-color: auto;
+}
