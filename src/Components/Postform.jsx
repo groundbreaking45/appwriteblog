@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { Button, RTE, Input, Select, } from "./index"
 import { useForm } from "react-hook-form"
 import databaseInstance from "../appwrite/database"
@@ -12,8 +12,18 @@ import { useSelector } from "react-redux"
 const Postform = ({ post }) => {
 
 
+    const [uploadedFile, setUploadedFile] = useState(null);
 
-   
+    const handleFileChange = async (e) => {
+        if (e.target.files.length > 0) {
+            const file = await ImageStorageInstance.uploadFile(e.target.files[0]);
+            setUploadedFile(file);
+        }
+    };
+
+
+
+
 
 
     const { register, control, watch, setValue, getValues, handleSubmit } = useForm({
@@ -27,38 +37,70 @@ const Postform = ({ post }) => {
 
 
 
-
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const navigate = useNavigate();
     const userData = useSelector(state => state.auth.userData);
 
     const submit = async (data) => {
 
+        if (isSubmitting) return;
+        setIsSubmitting(true);
 
 
-        if (post) {
+        try {
+
+
+            if (post) {
 
 
 
-            const file = data.image[0] ? await ImageStorageInstance.uploadFile(data.image[0]) : null;
 
 
 
-            if (file) await ImageStorageInstance.deleteFile(data.featuredImage);
+
+                if (uploadedFile && post.featuredImage) {
+                    await ImageStorageInstance.deleteFile(post.featuredImage);
+                }
+
+                const dbpost = await databaseInstance.updatePost(post.$id, {
+                    ...data,
+                    featuredImage: uploadedFile ? uploadedFile.$id : post.featuredImage,
+                });
 
 
-            const dbpost = await databaseInstance.updatePost(post.$id, { ...data, featuredImage: file ? file.$id : undefined, })
 
-            if (dbpost)
-                navigate(`/post/${dbpost.$id}`);
+
+
+                if (dbpost)
+                    navigate(`/post/${dbpost.$id}`);
+
+            }
+
+            else {
+                if (!uploadedFile) {
+                    alert("Please upload an image before submitting.");
+                    setIsSubmitting(false);
+                    return;
+                }
+
+                const dbpost = await databaseInstance.createPost({
+                    ...data,
+                    featuredImage: uploadedFile.$id,
+                    userId: userData.$id,
+                });
+                if (dbpost) navigate(`/post/${dbpost.$id}`);
+
+
+            }
 
         }
+        catch (error) {
+            console.log(error.message)
 
-        else {
-            const file = data.image[0] ? await ImageStorageInstance.uploadFile(data.image[0]) : null;
-
-            const dbpost = await databaseInstance.createPost({ ...data, featuredImage: file ? file.$id : undefined, userId: userData.$id })
-            if (dbpost) navigate(`/post/${dbpost.$id}`)
+        }
+        finally {
+            setIsSubmitting(false);
         }
 
 
@@ -78,7 +120,7 @@ const Postform = ({ post }) => {
     }, [])
 
     useEffect(() => {
-        
+
         console.log(`hello ye hain post ${post}`)
 
 
@@ -122,7 +164,7 @@ const Postform = ({ post }) => {
                     type="file"
                     className="mb-4"
                     accept="image/png, image/jpg, image/jpeg, image/gif"
-                    {...register("image", { required: !post })}
+                    onChange={handleFileChange}
                 />
                 {post && (
                     <div className="w-full mb-4">
@@ -139,9 +181,10 @@ const Postform = ({ post }) => {
                     className="mb-4"
                     {...register("status", { required: true })}
                 />
-                <Button type="submit" bgColor={post ? "bg-green-500" : undefined} className="w-full ">
-                    {post ? "Update" : "Submit"}
+                <Button type="submit" disabled={isSubmitting} className="w-full">
+                    {isSubmitting ? (post ? "Updating..." : "Submitting...") : (post ? "Update" : "Submit")}
                 </Button>
+
             </div>
         </form>
     )
