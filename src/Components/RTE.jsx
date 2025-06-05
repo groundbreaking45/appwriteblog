@@ -1,16 +1,10 @@
 import { Controller } from "react-hook-form"
 import { Editor } from "@tinymce/tinymce-react"
-import { useEffect } from "react";
+
 
 function RTE({ name, label, defaultValue = "", control }) {
 
-    useEffect(() => {
-        const editor = tinymce?.get(name);
-        if (editor) {
-            editor.focus();
-        }
-    }, []);
-
+  
 
     return (
         <div className="w-full max-w-full overflow-visible min-h-[300px]"> {label && <label className='inline-block mb-1 pl-1' >{label}</label>}
