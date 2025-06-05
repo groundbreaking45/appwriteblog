@@ -4,7 +4,7 @@ import { Editor } from "@tinymce/tinymce-react"
 function RTE({ name, label, defaultValue = "", control }) {
 
     return (
-        <div className="w-full max-w-full overflow-visible min-h-[300px] border border-blue-500"> {label && <label className='inline-block mb-1 pl-1' >{label}</label>}
+        <div className="w-full max-w-full overflow-visible min-h-[300px]"> {label && <label className='inline-block mb-1 pl-1' >{label}</label>}
 
             <Controller
                 name={name || "Content"}
@@ -46,11 +46,11 @@ function RTE({ name, label, defaultValue = "", control }) {
                                                 body { font-size: 16px; }
                                                                             }`,
 
-                                // mobile: {
-                                //     theme: 'mobile',
-                                //     plugins: ['autosave', 'lists', 'autolink'],
-                                //     toolbar: ['undo', 'redo', 'bold', 'italic', 'bullist', 'numlist'],
-                                // },
+                                mobile: {
+                                    theme: 'mobile',
+                                    plugins: ['autosave', 'lists', 'autolink'],
+                                    toolbar: ['undo', 'redo', 'bold', 'italic', 'bullist', 'numlist'],
+                                },
                                 width: "100%",
                                 min_width: 0,
                             }} onEditorChange={onChange}
