@@ -15,7 +15,7 @@ This is a full-stack blog application built using **React.js** on the frontend a
 - React.js (Vite)
 - Appwrite (Auth, Database, Storage)
 - React Router DOM
-- Rich text editor (React Quill)
+- Rich text editor (Tinymce)
 
 ---
 

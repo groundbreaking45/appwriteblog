@@ -1,5 +1,3 @@
-
-
 export const Button = ({
   children,
   type = "button",
@@ -18,19 +16,14 @@ export const Button = ({
   `;
 
   const visualStyle = isSubmit
-    ? "bg-green-600 text-white hover:bg-green-700 active:scale-95 shadow-md hover:shadow-lg"
-    : "bg-white text-black hover:bg-gray-200 rounded-full hover:scale-105 active:scale-95 shadow";
+    ? `${bgColor || "bg-green-600"} ${textColor || "text-white"} hover:bg-green-700 active:scale-95 shadow-md hover:shadow-lg`
+    : `${bgColor || "bg-white"} ${textColor || "text-black"} hover:bg-gray-200 rounded-full hover:scale-105 active:scale-95 shadow`;
 
   return (
     <button
       type={type}
       {...props}
-      className={`
-        ${baseStyle}
-        ${visualStyle}
-        ${textColor} ${bgColor}
-        ${className}
-      `}
+      className={`${baseStyle} ${visualStyle} ${className}`}
     >
       {children}
     </button>
