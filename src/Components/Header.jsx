@@ -58,7 +58,7 @@ const Header = () => {
           </div>
 
 
-          <ul className='flex flex-wrap ml-auto items-center gap-2'>
+          <ul className='flex flex-wrap ml-auto items-center gap-2 justify-end'>
             {NavItems.map((item) => item.active ? (
               <li key={item.name}>
                 <Button
