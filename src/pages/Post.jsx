@@ -9,6 +9,7 @@ import { Link } from "react-router-dom"
 
 
 const Post = () => {
+    const [imageUrl, setImageUrl] = useState(null);
     const [post, setPost] = useState(null);
     const navigate = useNavigate();
     const { slug } = useParams();
@@ -17,8 +18,10 @@ const Post = () => {
     const isAuthor = post && userData ? post.userId === userData.$id : false;
 
 
+
+
     useEffect(() => {
-          console.log(ImageStorageInstance.getFilePreview("6841466300004c3018a9"))
+
         if (slug) {
             databaseInstance.getPost(slug).then((gotPost) => {
                 if (gotPost) setPost(gotPost);
@@ -26,22 +29,36 @@ const Post = () => {
             })
         }
         else navigate('/');
+
     }, [slug, navigate])
 
 
+
+    useEffect(() => {
+    if (post?.featuredImage) {
+        async function fetchImage() {
+            const url = await ImageStorageInstance.getFilePreview(post.featuredImage);
+            setImageUrl(url);
+        }
+
+        fetchImage();
+    }
+}, [post]);
+
+
     const deletePost = async () => {
-      const status = await databaseInstance.deletePost(post.$id);
-      if (status) await ImageStorageInstance.deleteFile(post.featuredImage);
-      
-      navigate('/')
+        const status = await databaseInstance.deletePost(post.$id);
+        if (status) await ImageStorageInstance.deleteFile(post.featuredImage);
+
+        navigate('/')
     }
 
     return post ? (
         <div className="py-8">
             <Container>
                 <div className="w-full flex justify-center mb-4 relative border rounded-xl p-2">
-                    <img 
-                        src={ImageStorageInstance.getFilePreview(post.featuredImage)}
+                    <img
+                        src={imageUrl}
                         alt={post.title}
                         className="rounded-xl"
                     />
@@ -64,7 +81,7 @@ const Post = () => {
                 </div>
                 <div className="browser-css">
                     {parse(post.content)}
-                    </div>
+                </div>
             </Container>
         </div>
     ) : null;
