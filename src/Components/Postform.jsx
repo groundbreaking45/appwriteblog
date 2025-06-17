@@ -46,45 +46,40 @@ const Postform = ({ post }) => {
 
             if (post) {
 
-             let featuredImage = post?.featuredImage || null;
+                let featuredImage = post?.featuredImage || null;
 
-               if(data.image && data.image.length > 0)  {
-               const file =  await ImageStorageInstance.uploadFile(data.image[0]) 
-                if (file) featuredImage = file.$id;
-               }
-               
-                const dbpost = await databaseInstance.updatePost(post.$id,{
+                if (data.image && data.image.length > 0) {
+                    const file = await ImageStorageInstance.uploadFile(data.image[0])
+                    if (file) featuredImage = file.$id;
+                }
+
+                const dbpost = await databaseInstance.updatePost(post.$id, {
                     ...data,
                     featuredImage,
-                   
+
                 });
-                if (dbpost)   navigate(`/post/${dbpost.$id}`);
-               
+                if (dbpost) navigate(`/post/${dbpost.$id}`);
 
 
 
 
-                
+
+
 
             }
 
             else {
-               
-                const file = data.image[0] ?  await ImageStorageInstance.uploadFile(data.image[0]) : null
-
-                if (file) {
+                const file = data.image?.[0] ? await ImageStorageInstance.uploadFile(data.image[0]) : null;
 
                 const dbpost = await databaseInstance.createPost({
                     ...data,
                     featuredImage: file?.$id || null,
-                    userId: userData.$id,
+                    userId: userData?.$id,
                 });
+
                 if (dbpost) navigate(`/post/${dbpost.$id}`);
             }
-                
 
-
-            }
 
         }
         catch (error) {

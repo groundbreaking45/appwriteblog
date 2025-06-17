@@ -4,6 +4,7 @@ export const Button = ({
   bgColor = "",
   textColor = "",
   className = "",
+  disabled = false,
   ...props
 }) => {
   const isSubmit = type === "submit";
@@ -19,11 +20,14 @@ export const Button = ({
     ? `${bgColor || "bg-green-600"} ${textColor || "text-white"} hover:bg-green-700 active:scale-95 shadow-md hover:shadow-lg`
     : `${bgColor || "bg-white"} ${textColor || "text-black"} hover:bg-gray-200 rounded-full hover:scale-105 active:scale-95 shadow`;
 
+  const disabledStyle = disabled ? "opacity-50 cursor-not-allowed" : "";
+
   return (
     <button
       type={type}
+      disabled={disabled}
       {...props}
-      className={`${baseStyle} ${visualStyle} ${className}`}
+      className={`${baseStyle} ${visualStyle} ${disabledStyle} ${className}`}
     >
       {children}
     </button>
