@@ -39,7 +39,7 @@ const Login = () => {
 
     return (
         <div
-            className='flex items-center  min-h-screen justify-center'
+            className='flex items-center justify-center'
         >
             <div className={`mx-auto w-[90vw] md:w-2/3 max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}>
                 <div className="mb-2 flex justify-center">
