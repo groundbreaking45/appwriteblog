@@ -1,6 +1,7 @@
-import {Container,Logo,LogoutButton } from "./index"
+import { Container, Logo, LogoutButton } from "./index"
 import { Link, useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
+import { Button } from "./index"
 
 
 
@@ -57,10 +58,17 @@ const Header = () => {
           </div>
 
 
-          <ul className='flex ml-auto'>
+          <ul className='flex flex-wrap ml-auto items-center gap-2'>
             {NavItems.map((item) => item.active ? (
               <li key={item.name}>
-                <button onClick={() =>  navigate(item.Url)} className='inline-bock px-6 py-2 duration-200 hover:bg-blue-100 rounded-full'>{item.name}</button>
+                <Button
+                  onClick={() => navigate(item.Url)}
+                  bgColor="bg-white"
+                  textColor="text-black"
+                  className="hover:bg-gray-200 rounded-full"
+                >
+                  {item.name}
+                </Button>
 
               </li>
 
