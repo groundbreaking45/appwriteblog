@@ -56,7 +56,7 @@ export class imageStorage {
 
   async getFilePreview(fileId) {
         try {
-            const filePreview =  await this.Bucket.getFileView(confg.appWriteBucketID, fileId);
+            const filePreview =  await this.Bucket.getFilePreview(confg.appWriteBucketID, fileId);
 
             return filePreview || null;
 
